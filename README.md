@@ -1,20 +1,16 @@
-# Hi, I'm Piexel
+<img src="assets/banner.webp" width="100%" alt="Piexel: Minecraft worldgen and Linux tinkering">
 
 I'm building MCWorldGen, an overhaul of what worldgen means in Minecraft.
 Before that I worked on [Iris](https://github.com/VolmitSoftware/Iris).
 On the side I make small tools for my own machines and fix bugs in projects I use.
 
-<p align="center">
-  <img src="assets/aerial.jpg" width="32%" alt="Aerial view of red rock mountains above the clouds">
-  <img src="assets/peak.jpg" width="32%" alt="A lone mountain peak over a pine forest">
-  <img src="assets/crystal.jpg" width="32%" alt="Crystal spires behind autumn trees">
-</p>
-
 ## Things I made
 
-- **[zfan](https://github.com/piexelated/zfan)**: fan control for HP ZBooks on Linux. A kernel driver and a terminal dashboard.
-- **[Codex Provider](https://github.com/piexelated/CodexProvider)**: use your ChatGPT account in JetBrains AI Assistant.
-- **[Suwayomi for Paperback](https://github.com/piexelated/paperback-suwayomi)**: read manga from your own Suwayomi server on iOS.
+<p><!--
+--><a href="https://github.com/piexelated/zfan"><img src="assets/cards/zfan.webp" width="33.33%" alt="zfan: fan control for HP ZBook laptops on Linux"></a><!--
+--><a href="https://github.com/piexelated/CodexProvider"><img src="assets/cards/codex-provider.webp" width="33.33%" alt="Codex Provider: your ChatGPT account in JetBrains AI Assistant"></a><!--
+--><a href="https://github.com/piexelated/paperback-suwayomi"><img src="assets/cards/paperback-suwayomi.webp" width="33.33%" alt="Suwayomi for Paperback: read manga from your own Suwayomi server on iOS"></a><!--
+--></p>
 
 ## Open source
 
