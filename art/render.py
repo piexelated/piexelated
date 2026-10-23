@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Renders the profile banner and project cards into ../assets.
+"""Renders the profile banner and project rows into ../assets.
 
 Needs google-chrome and ImageMagick (magick). Run: python3 art/render.py
 Libron is bundled under the SIL Open Font License (art/fonts/OFL.txt).
@@ -11,8 +11,9 @@ from pathlib import Path
 
 ART_DIR = Path(__file__).resolve().parent
 ASSETS_DIR = ART_DIR.parent / "assets"
-CARDS_DIR = ASSETS_DIR / "cards"
+ROWS_DIR = ASSETS_DIR / "rows"
 BANNER_PHOTOS_DIR = ART_DIR / "banner"
+ROW_PHOTOS_DIR = ART_DIR / "rows"
 FONTS_DIR = ART_DIR / "fonts"
 
 DEVICE_SCALE = 2
@@ -24,18 +25,14 @@ BANNER_SLICE_EDGES_PCT = (0, 36, 58, 79, 100)
 BANNER_SLICE_SKEW_PCT = 3.5
 # Each slice reaches slightly under its left neighbour so anti-aliased diagonal edges leave no hairline gap.
 BANNER_SEAM_OVERLAP_PCT = 0.4
-CARD_SLOT_SIZE = (360, 180)
-CARD_GAP_PX = 12
+ROW_SIZE = (830, 92)
 WEBP_QUALITY = 86
 
 LANGUAGE_COLORS = {
-    "C": "#555555",
     "Python": "#3572A5",
     "Kotlin": "#A97BFF",
     "TypeScript": "#3178C6",
 }
-
-CARD_COLORS = {"surface": "#151b23", "border": "#3d444d", "title": "#f0f6fc", "text": "#9198a1", "muted": "#768390"}
 
 
 @dataclass(frozen=True)
@@ -44,13 +41,15 @@ class Project:
     name: str
     kind: str
     description: str
-    languages: tuple[str, ...]
+    accent_color: str | None = None
+    photo: str | None = None
 
 
 PROJECTS = [
-    Project("zfan", "zfan", "Kernel driver · TUI", "Fan control for HP ZBook laptops on Linux.", ("Python", "C")),
-    Project("codex-provider", "Codex Provider", "IntelliJ plugin", "Your ChatGPT account in JetBrains AI Assistant.", ("Kotlin",)),
-    Project("paperback-suwayomi", "Suwayomi for Paperback", "Paperback extension", "Read manga from your own Suwayomi server on iOS.", ("TypeScript",)),
+    Project("rrt", "RRT", "Minecraft terrain", "My own take on Minecraft worldgen: 17 regions, built for survival.", photo="rrt"),
+    Project("zfan", "zfan", "Kernel driver & TUI", "Fan control for HP ZBook laptops on Linux.", LANGUAGE_COLORS["Python"]),
+    Project("codex-provider", "Codex Provider", "IntelliJ plugin", "Your ChatGPT account in JetBrains AI Assistant.", LANGUAGE_COLORS["Kotlin"]),
+    Project("paperback-suwayomi", "Suwayomi for Paperback", "Paperback extension", "Read manga from your own Suwayomi server on iOS.", LANGUAGE_COLORS["TypeScript"]),
 ]
 
 BASE_STYLE = f"""
@@ -58,7 +57,6 @@ BASE_STYLE = f"""
 @font-face {{ font-family: Libron; font-style: italic; src: url('{(FONTS_DIR / "Libron-Italic.ttf").as_uri()}'); }}
 html, body {{ margin: 0; background: transparent; }}
 body {{ font-family: 'Adwaita Sans', 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }}
-.mono {{ font-family: 'Adwaita Mono', monospace; }}
 .serif {{ font-family: Libron, serif; }}
 """
 
@@ -100,44 +98,35 @@ p {{ margin: 8px 0 0; font-size: 26px; font-style: italic; color: rgba(255,255,2
 </div></div></body></html>"""
 
 
-def card_width() -> int:
-    slot_count = len(PROJECTS)
-    return (slot_count * CARD_SLOT_SIZE[0] - (slot_count - 1) * CARD_GAP_PX) // slot_count
-
-
-def card_offset(position: int) -> int:
-    # GitHub strips CSS, so the README places the cards edge to edge and the gaps are
-    # transparent space baked into each image. A card shifts right with its position so
-    # the outer cards stay flush with the banner edges.
-    return position * (card_width() + CARD_GAP_PX - CARD_SLOT_SIZE[0])
-
-
-def card_html(project: Project, position: int) -> str:
-    accent = LANGUAGE_COLORS[project.languages[0]]
-    languages = "".join(
-        f'<span class="lang"><i style="background:{LANGUAGE_COLORS[language]}"></i>{language}</span>'
-        for language in project.languages
+def row_background(project: Project) -> str:
+    if project.photo is None:
+        return "linear-gradient(90deg, #161d27, #121821)"
+    photo_url = (ROW_PHOTOS_DIR / f"{project.photo}.jpg").as_uri()
+    return (
+        "linear-gradient(90deg, rgba(10,14,22,.92) 0%, rgba(10,14,22,.55) 42%, rgba(10,14,22,.05) 100%), "
+        f"url('{photo_url}') center / cover"
     )
+
+
+def row_html(project: Project) -> str:
+    accent_bar = f".row::before {{ content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: {project.accent_color}; }}" if project.accent_color else ""
     return f"""<!doctype html><html><head><meta charset="utf-8"><style>{BASE_STYLE}
-.card {{
-  box-sizing: border-box; width: {card_width()}px; height: {CARD_SLOT_SIZE[1]}px; padding: 20px 22px;
-  margin-left: {card_offset(position)}px;
-  border: 1px solid {CARD_COLORS['border']}; border-radius: 12px; background: {CARD_COLORS['surface']};
-  position: relative; overflow: hidden; display: flex; flex-direction: column;
+.row {{
+  box-sizing: border-box; width: {ROW_SIZE[0]}px; height: {ROW_SIZE[1]}px; padding: 0 28px;
+  display: flex; align-items: center; gap: 28px; position: relative; overflow: hidden;
+  border: 1px solid #2a313b; border-radius: 12px; background: {row_background(project)};
 }}
-.card::before {{ content: ''; position: absolute; left: 0; right: 0; top: 0; height: 3px; background: linear-gradient(90deg, {accent}, transparent 80%); }}
-.kind {{ font-size: 13px; letter-spacing: 1.1px; text-transform: uppercase; color: {CARD_COLORS['muted']}; }}
-.name {{ margin-top: 7px; font-size: 22px; font-weight: 700; letter-spacing: -.2px; color: {CARD_COLORS['title']}; white-space: nowrap; }}
-.name span {{ font-family: 'Adwaita Sans', sans-serif; color: {CARD_COLORS['muted']}; font-weight: 400; font-size: 20px; }}
-.desc {{ margin-top: 6px; font-size: 16px; line-height: 1.38; color: {CARD_COLORS['text']}; text-wrap: balance; }}
-.langs {{ margin-top: auto; font-size: 14px; color: {CARD_COLORS['text']}; display: flex; gap: 16px; }}
-.lang i {{ display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; vertical-align: -1px; }}
+{accent_bar}
+.title {{ width: 330px; flex: none; white-space: nowrap; }}
+.title b {{ display: block; font-size: 25px; font-weight: 700; line-height: 1.1; color: #f0f6fc; }}
+.title i {{ display: block; margin-top: 3px; font-size: 16px; color: #9198a1; }}
+.desc {{ flex: 1; font-size: 16px; line-height: 1.45; color: #c9d1d9; text-wrap: balance; text-shadow: 0 1px 6px rgba(0,0,0,.6); }}
+.go {{ font-size: 22px; color: #9198a1; text-shadow: 0 1px 6px rgba(0,0,0,.8); }}
 </style></head><body>
-<div class="card">
-  <div class="kind mono">{project.kind}</div>
-  <div class="name serif">{project.name} <span>↗</span></div>
+<div class="row">
+  <div class="title serif"><b>{project.name}</b><i>{project.kind}</i></div>
   <div class="desc">{project.description}</div>
-  <div class="langs mono">{languages}</div>
+  <div class="go">↗</div>
 </div></body></html>"""
 
 
@@ -163,13 +152,12 @@ def screenshot_to_webp(html: str, size: tuple[int, int], output_path: Path, work
 
 
 def main() -> None:
-    CARDS_DIR.mkdir(parents=True, exist_ok=True)
+    ROWS_DIR.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory() as work:
         work_dir = Path(work)
         screenshot_to_webp(banner_html(), BANNER_SIZE, ASSETS_DIR / "banner.webp", work_dir)
-        for position, project in enumerate(PROJECTS):
-            output_path = CARDS_DIR / f"{project.slug}.webp"
-            screenshot_to_webp(card_html(project, position), CARD_SLOT_SIZE, output_path, work_dir)
+        for project in PROJECTS:
+            screenshot_to_webp(row_html(project), ROW_SIZE, ROWS_DIR / f"{project.slug}.webp", work_dir)
 
 
 if __name__ == "__main__":
