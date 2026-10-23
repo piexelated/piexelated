@@ -1,4 +1,4 @@
-<img src="assets/banner.webp" width="100%" alt="Piexel: Minecraft worldgen and Linux tinkering">
+<img src="assets/banner.webp" width="100%" alt="Piexel: building stuff, over a strip of generated Minecraft landscapes">
 
 I'm building MCWorldGen, an overhaul of what worldgen means in Minecraft.
 Before that I worked on [Iris](https://github.com/VolmitSoftware/Iris).
