@@ -6,10 +6,10 @@ On the side I make small tools for my own machines and fix bugs in projects I us
 
 ## Things I made
 
-<p><a href="https://github.com/MCWorldGen/RRT-Screenshots"><img src="assets/rows/rrt.webp" width="100%" alt="RRT: my own take on Minecraft worldgen, 17 regions built for survival"></a></p>
-<p><a href="https://github.com/piexelated/zfan"><img src="assets/rows/zfan.webp" width="100%" alt="zfan: fan control for HP ZBook laptops on Linux"></a></p>
-<p><a href="https://github.com/piexelated/CodexProvider"><img src="assets/rows/codex-provider.webp" width="100%" alt="Codex Provider: your ChatGPT account in JetBrains AI Assistant"></a></p>
-<p><a href="https://github.com/piexelated/paperback-suwayomi"><img src="assets/rows/paperback-suwayomi.webp" width="100%" alt="Suwayomi for Paperback: read manga from your own Suwayomi server on iOS"></a></p>
+- **[RRT](https://github.com/MCWorldGen/RRT-Screenshots)**: my own take on Minecraft worldgen, 17 regions built for survival.
+- **[zfan](https://github.com/piexelated/zfan)**: fan control for HP ZBook laptops on Linux.
+- **[Codex Provider](https://github.com/piexelated/CodexProvider)**: your ChatGPT account in JetBrains AI Assistant.
+- **[Suwayomi for Paperback](https://github.com/piexelated/paperback-suwayomi)**: read manga from your own Suwayomi server on iOS.
 
 ## Open source
 

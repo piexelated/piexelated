@@ -1,19 +1,16 @@
 #!/usr/bin/env python3
-"""Renders the profile banner and project rows into ../assets.
+"""Renders the profile banner into ../assets.
 
 Needs google-chrome and ImageMagick (magick). Run: python3 art/render.py
 Libron is bundled under the SIL Open Font License (art/fonts/OFL.txt).
 """
 import subprocess
 import tempfile
-from dataclasses import dataclass
 from pathlib import Path
 
 ART_DIR = Path(__file__).resolve().parent
 ASSETS_DIR = ART_DIR.parent / "assets"
-ROWS_DIR = ASSETS_DIR / "rows"
 BANNER_PHOTOS_DIR = ART_DIR / "banner"
-ROW_PHOTOS_DIR = ART_DIR / "rows"
 FONTS_DIR = ART_DIR / "fonts"
 
 DEVICE_SCALE = 2
@@ -25,38 +22,13 @@ BANNER_SLICE_EDGES_PCT = (0, 36, 58, 79, 100)
 BANNER_SLICE_SKEW_PCT = 3.5
 # Each slice reaches slightly under its left neighbour so anti-aliased diagonal edges leave no hairline gap.
 BANNER_SEAM_OVERLAP_PCT = 0.4
-ROW_SIZE = (830, 92)
 WEBP_QUALITY = 86
-
-LANGUAGE_COLORS = {
-    "Python": "#3572A5",
-    "Kotlin": "#A97BFF",
-    "TypeScript": "#3178C6",
-}
-
-
-@dataclass(frozen=True)
-class Project:
-    slug: str
-    name: str
-    kind: str
-    description: str
-    accent_color: str | None = None
-    photo: str | None = None
-
-
-PROJECTS = [
-    Project("rrt", "RRT", "Minecraft terrain", "My own take on Minecraft worldgen: 17 regions, built for survival.", photo="rrt"),
-    Project("zfan", "zfan", "Kernel driver & TUI", "Fan control for HP ZBook laptops on Linux.", LANGUAGE_COLORS["Python"]),
-    Project("codex-provider", "Codex Provider", "IntelliJ plugin", "Your ChatGPT account in JetBrains AI Assistant.", LANGUAGE_COLORS["Kotlin"]),
-    Project("paperback-suwayomi", "Suwayomi for Paperback", "Paperback extension", "Read manga from your own Suwayomi server on iOS.", LANGUAGE_COLORS["TypeScript"]),
-]
 
 BASE_STYLE = f"""
 @font-face {{ font-family: Libron; font-weight: 700; src: url('{(FONTS_DIR / "Libron-Bold.ttf").as_uri()}'); }}
 @font-face {{ font-family: Libron; font-style: italic; src: url('{(FONTS_DIR / "Libron-Italic.ttf").as_uri()}'); }}
 html, body {{ margin: 0; background: transparent; }}
-body {{ font-family: 'Adwaita Sans', 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }}
+body {{ -webkit-font-smoothing: antialiased; }}
 .serif {{ font-family: Libron, serif; }}
 """
 
@@ -98,38 +70,6 @@ p {{ margin: 8px 0 0; font-size: 26px; font-style: italic; color: rgba(255,255,2
 </div></div></body></html>"""
 
 
-def row_background(project: Project) -> str:
-    if project.photo is None:
-        return "linear-gradient(90deg, #161d27, #121821)"
-    photo_url = (ROW_PHOTOS_DIR / f"{project.photo}.jpg").as_uri()
-    return (
-        "linear-gradient(90deg, rgba(10,14,22,.92) 0%, rgba(10,14,22,.55) 42%, rgba(10,14,22,.05) 100%), "
-        f"url('{photo_url}') center / cover"
-    )
-
-
-def row_html(project: Project) -> str:
-    accent_bar = f".row::before {{ content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: {project.accent_color}; }}" if project.accent_color else ""
-    return f"""<!doctype html><html><head><meta charset="utf-8"><style>{BASE_STYLE}
-.row {{
-  box-sizing: border-box; width: {ROW_SIZE[0]}px; height: {ROW_SIZE[1]}px; padding: 0 28px;
-  display: flex; align-items: center; gap: 28px; position: relative; overflow: hidden;
-  border: 1px solid #2a313b; border-radius: 12px; background: {row_background(project)};
-}}
-{accent_bar}
-.title {{ width: 330px; flex: none; white-space: nowrap; }}
-.title b {{ display: block; font-size: 25px; font-weight: 700; line-height: 1.1; color: #f0f6fc; }}
-.title i {{ display: block; margin-top: 3px; font-size: 16px; color: #9198a1; }}
-.desc {{ flex: 1; font-size: 16px; line-height: 1.45; color: #c9d1d9; text-wrap: balance; text-shadow: 0 1px 6px rgba(0,0,0,.6); }}
-.go {{ font-size: 22px; color: #9198a1; text-shadow: 0 1px 6px rgba(0,0,0,.8); }}
-</style></head><body>
-<div class="row">
-  <div class="title serif"><b>{project.name}</b><i>{project.kind}</i></div>
-  <div class="desc">{project.description}</div>
-  <div class="go">↗</div>
-</div></body></html>"""
-
-
 def screenshot_to_webp(html: str, size: tuple[int, int], output_path: Path, work_dir: Path) -> None:
     page_path = work_dir / f"{output_path.stem}.html"
     png_path = work_dir / f"{output_path.stem}.png"
@@ -152,12 +92,8 @@ def screenshot_to_webp(html: str, size: tuple[int, int], output_path: Path, work
 
 
 def main() -> None:
-    ROWS_DIR.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory() as work:
-        work_dir = Path(work)
-        screenshot_to_webp(banner_html(), BANNER_SIZE, ASSETS_DIR / "banner.webp", work_dir)
-        for project in PROJECTS:
-            screenshot_to_webp(row_html(project), ROW_SIZE, ROWS_DIR / f"{project.slug}.webp", work_dir)
+        screenshot_to_webp(banner_html(), BANNER_SIZE, ASSETS_DIR / "banner.webp", Path(work))
 
 
 if __name__ == "__main__":
