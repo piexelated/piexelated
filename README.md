@@ -5,14 +5,14 @@ Before that I worked on [Iris](https://github.com/VolmitSoftware/Iris).
 Even more on the side I make small tools for my own machines and fix bugs in projects I use :')
 
 ## Stuff I did / made
-
-- **[RRT Beta](https://github.com/MCWorldGen/RRT-Screenshots)**: my own take on Minecraft worldgen currently intended for commercial server use (wip)
+- **[Iris](https://github.com/VolmitSoftware/Iris)** Doing stuff there. 
 - **[zfan](https://github.com/piexelated/zfan)**: wip mediocre fan control for HP ZBook laptops on Linux.
 - **[Codex Provider](https://github.com/piexelated/CodexProvider)**: use OpenAI's subsidisation in JetBrains AI Assistant.
 - **[Suwayomi for Paperback](https://github.com/piexelated/paperback-suwayomi)**: read manga from your own Suwayomi server on paperback.
 - **[Btop slopfork](https://github.com/piexelated/btop)** support Intel Xe GPUs, Won't disturn nvidias sleep. show iGpu clock in the cpu box.  
+- **[RRT Beta](https://github.com/MCWorldGen/RRT-Screenshots)**: my own take on Minecraft worldgen currently intended for commercial server use (wip)
 
-## OSS Contributions 
+## Honorable? OSS Contributions 
 - **[Iris](https://github.com/VolmitSoftware/Iris)** Have rewritten the [Iris Studio mode](https://github.com/VolmitSoftware/Iris/pull/1254) to a new design + feature set with OpenGL based rendering.
 - **[Hominid](https://github.com/Alganaut/Hominid)** Doing stuff there. 
 - **[Iris Overworld](https://github.com/IrisDimensions/overworld)**: shipped pack releases V3500 through V3910 with new biomes and regions.
