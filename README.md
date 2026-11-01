@@ -6,6 +6,7 @@ Even more on the side I make small tools for my own machines and fix bugs in pro
 
 ## Stuff I did / made
 - **[Iris](https://github.com/VolmitSoftware/Iris)** Doing stuff there. 
+- **[Agent pill](https://github.com/piexelated/agent-pill) A bar for t3 code for noctalia. 
 - **[zfan](https://github.com/piexelated/zfan)**: wip mediocre fan control for HP ZBook laptops on Linux.
 - **[Codex Provider](https://github.com/piexelated/CodexProvider)**: use OpenAI's subsidisation in JetBrains AI Assistant.
 - **[Suwayomi for Paperback](https://github.com/piexelated/paperback-suwayomi)**: read manga from your own Suwayomi server on paperback.
