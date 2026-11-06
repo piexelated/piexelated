@@ -1,11 +1,10 @@
 <img src="assets/banner.webp" width="100%" alt="Piexel: building stuff, over a strip of generated Minecraft landscapes">
 
 Atm I'm building MCWorldGen as one of my side projects, an overhaul of Minecraft's worldgen and more.
-Before that I worked on [Iris](https://github.com/VolmitSoftware/Iris).
 Even more on the side I make small tools for my own machines and fix bugs in projects I use :') 
 As of recently thought that publishing my work might not be such a strange idea after all.. 
 
-## Stuff I did / made
+## Stuff I did / doing
 - **[Iris](https://github.com/VolmitSoftware/Iris)** Doing stuff there. 
 - **[Agent pill](https://github.com/piexelated/agent-pill)** A bar for t3 code for noctalia. 
 - **[zfan](https://github.com/piexelated/zfan)**: wip mediocre fan control for HP ZBook laptops on Linux.
